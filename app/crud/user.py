@@ -1,15 +1,23 @@
 from sqlalchemy.orm import Session
 from app.models.user import Users
-from app.schemas.user import UserCreat
+from app.schemas.user import UserCreate
+from app.core.security import get_password_hash
 
-def create_user(db:Session,user:UserCreat):
-    new_user=Users(**user.model_dump())
+def create_user(db: Session, user: UserCreate):
+    hashed_password = get_password_hash(user.password)  # password thô ở đây
+    user_data = user.model_dump()
+    user_data["hashed_password"] = hashed_password
+    # Nếu có trường 'password' thì xóa đi vì không cần lưu raw password
+    if "password" in user_data:
+        del user_data["password"]
+    new_user = Users(**user_data)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
-def update_user(db:Session, user_id:int,user_data:UserCreat):
+
+def update_user(db:Session, user_id:int,user_data:UserCreate):
     user=db.query(Users).filter(Users.id==user_id).first()
     if not user:
         return None

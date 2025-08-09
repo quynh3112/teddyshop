@@ -29,7 +29,7 @@ app.include_router(review.router,prefix="/reviews",tags=["Reviews"])
 app.include_router(cart_item.router,prefix="/cartitems",tags=['CartItems'])
 app.include_router(order_item.router,prefix="/orderitems",tags=["OrderItems"])
 app.include_router(order.router,prefix="/orders",tags=["Orders"])
-app.include_router(login.router,prefix="login")
+app.include_router(login.router,prefix="/login")
 
 
 

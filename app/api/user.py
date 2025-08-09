@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.user import User, UserCreat
+from app.schemas.user import User, UserCreate
 from app.crud import user as user_crud
 from app.database import get_db
 router=APIRouter()
 @router.post("/", response_model=User)
-def create_user(user:UserCreat, db:Session=Depends(get_db)):
+def create_user(user:UserCreate, db:Session=Depends(get_db)):
     try:
         return user_crud.create_user(db, user)
     except Exception as e:
@@ -19,7 +19,7 @@ def create_user(user:UserCreat, db:Session=Depends(get_db)):
 def get_all_user(db:Session=Depends(get_db)):
     return user_crud.get_all_user(db)
 @router.put("/{user_id}",response_model=User)
-def update_user(user_id:int,user_data:UserCreat,db:Session=Depends(get_db)):
+def update_user(user_id:int,user_data:UserCreate,db:Session=Depends(get_db)):
     user=user_crud.update_user(db,user_id,user_data)
     if not user:
         raise HTTPException(status_code=404,detail="Không tìm thấy người dùng")
